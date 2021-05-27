@@ -9,6 +9,7 @@ import 'dart:math' as math;
 import 'package:dart_pad/elements/material_tab_controller.dart';
 import 'package:dart_pad/src/ga.dart';
 import 'package:dart_pad/util/detect_flutter.dart';
+import 'package:http/http.dart';
 import 'package:mdc_web/mdc_web.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:split/split.dart';
@@ -57,6 +58,8 @@ class EmbedOptions {
 /// An embeddable DartPad UI that provides the ability to test the user's code
 /// snippet against a desired result.
 class Embed extends EditorUi {
+  final client = Client();
+
   final EmbedOptions options;
 
   var _executionButtonCount = 0;
@@ -360,8 +363,14 @@ class Embed extends EditorUi {
 
     executionService.testResults.listen((result) {
       if (result.messages.isEmpty) {
-        result.messages
-            .add(result.success ? 'All tests passed!' : 'Test failed.');
+        if (result.success) {
+          final uri = Uri.https('gather-town-service-qohzfcl2pq-uc.a.run.app',
+              '', {'map': 'updated'});
+          client.post(uri);
+        }
+        result.messages.add(result.success
+            ? 'You have achieved success! You can close the window as a new path has opened...'
+            : 'Test failed.');
       }
       testResultBox.showStrings(
         result.messages,
