@@ -365,7 +365,7 @@ class Embed extends EditorUi {
       if (result.messages.isEmpty) {
         if (result.success) {
           final uri = Uri.https('gather-town-service-qohzfcl2pq-uc.a.run.app',
-              '', {'map': 'updated'});
+              '', {'delta': 'unblockGame'});
           client.post(uri);
         }
         result.messages.add(result.success
